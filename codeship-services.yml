@@ -1,0 +1,24 @@
+myapp:
+  build:
+    image: amitsaha/webapp-demo:golang
+    context: webapp
+    dockerfile: Dockerfile
+
+chef_builder:
+  build:
+    image: amitsaha/chef-builder
+    context: .
+    dockerfile: Dockerfile.chef
+  encrypted_env_file: aws-deployment.env.encrypted
+  volumes:
+    - ./:/deploy
+curl:
+  image: pstauffer/curl:latest
+  depends_on: ["myapp"]
+awsdeployment:
+  image: codeship/aws-deployment
+  encrypted_env_file: aws-deployment.env.encrypted
+  volumes:
+    - ./:/deploy
+  environment:
+    - AWS_DEFAULT_REGION=ap-southeast-2

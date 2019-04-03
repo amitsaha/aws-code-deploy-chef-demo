@@ -1,0 +1,12 @@
+version: 0.0
+os: linux
+
+hooks:
+  ApplicationStop:
+    - location: ./cd_eventhandler.bash
+  AfterInstall:
+    - location: ./cd_eventhandler.bash
+  ApplicationStart:
+    - location: ./cd_eventhandler.bash
+  ValidateService:
+    - location: ./cd_eventhandler.bash

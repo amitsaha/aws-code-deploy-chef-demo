@@ -1,0 +1,5 @@
+FROM ubuntu:bionic
+RUN apt-get update && \
+    apt-get -y install wget zip awscli && \
+    wget https://packages.chef.io/files/stable/chef-workstation/0.2.43/ubuntu/18.04/chef-workstation_0.2.43-1_amd64.deb && \
+    dpkg -i chef-workstation_0.2.43-1_amd64.deb

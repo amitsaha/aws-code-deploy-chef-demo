@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -e
+
+# Add custom repositories
+
+sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
+
+apt-get update
+
+# Install packages
+apt-get install -y \
+    awscli \
+    zip \
+    unzip
+
+
+# Chef
+wget https://packages.chef.io/files/stable/chef-workstation/0.2.43/ubuntu/18.04/chef-workstation_0.2.43-1_amd64.deb
+dpkg -i chef-workstation_0.2.43-1_amd64.deb
+
+# AWS Code deploy agent
+apt-get -y install ruby
+wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+ruby install auto
+systemctl enable codedeploy-agent
+systemctl start codedeploy-agent

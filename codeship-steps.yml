@@ -1,0 +1,27 @@
+- service: curl
+  name: Test
+  command: curl -I http://myapp:8080
+
+- service: myapp
+  name: Push docker image for application
+  type: push
+  image_name: amitsaha/webapp-demo:golang
+  image_tag: golang
+  encrypted_dockercfg_path: dockercfg.encrypted
+
+- service: chef_builder
+  name: Push chef builder
+  type: push
+  image_name: amitsaha/chef-builder
+  encrypted_dockercfg_path: dockercfg.encrypted
+
+- service: chef_builder
+  name: Build and deploy chef artifact
+  command: bash /deploy/build_chef.sh
+
+- type: manual
+  tag: master
+  steps:
+    - service: awsdeployment
+      name: Deploy
+      command: codeship_aws codedeploy_deploy /deploy/webapp/deployment webapp webapp-test aws-codedeploy-chef-demo
